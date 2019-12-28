@@ -39,14 +39,22 @@
 #include <sys/time.h>
 #include <sys/ioctl.h>
 
-#include <dev/usb/usb.h>
+#include "freebsd-usb.h"
 
 #include "usbi.h"
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_OLD_DEV_USB_USB_H
+/*
+ * Since the Debian version includes "freebsd-usb.h" instead of
+ * <dev/usb/usb.h>, the API provided by the latter file does not matter. The
+ * configure check gives false positives as of 2012, but rather than fixing a
+ * check for something we don't use anyway, just unconditionally skip those
+ * definitions.
+ * #ifdef HAVE_OLD_DEV_USB_USB_H
+ */
+#if 0
 /*
  * It appears some of the BSD's (OpenBSD atleast) have switched over to a
  * new naming convention, so we setup some macro's for backward
