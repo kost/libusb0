@@ -7,7 +7,7 @@ typedef enum {
   USB_ERROR_TYPE_ERRNO,
 } usb_error_type_t;
 
-extern char usb_error_str[1024];
+extern char usb_error_str[8192];
 extern int usb_error_errno;
 extern usb_error_type_t usb_error_type;
 

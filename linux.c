@@ -18,15 +18,18 @@
 #include "linux.h"
 #include "usbi.h"
 
-static char usb_path[PATH_MAX + 1] = "";
+static char usb_path[PATH_MAX] = "";
 
 static int device_open(struct usb_device *dev)
 {
-  char filename[PATH_MAX + 1];
-  int fd;
+  char filename[PATH_MAX];
+  int fd, r;
 
-  snprintf(filename, sizeof(filename) - 1, "%s/%s/%s",
+  r = snprintf(filename, sizeof(filename) - 1, "%s/%s/%s",
     usb_path, dev->bus->dirname, dev->filename);
+  if (r < 0 || r >= sizeof(filename))
+    USB_ERROR_STR(-ENAMETOOLONG, "failed to open: %s",
+	strerror(ENAMETOOLONG));
 
   fd = open(filename, O_RDWR);
   if (fd < 0) {
@@ -377,9 +380,13 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
   struct usb_device *fdev = NULL;
   DIR *dir;
   struct dirent *entry;
-  char dirpath[PATH_MAX + 1];
+  char dirpath[PATH_MAX];
+  int r;
 
-  snprintf(dirpath, PATH_MAX, "%s/%s", usb_path, bus->dirname);
+  r = snprintf(dirpath, PATH_MAX, "%s/%s", usb_path, bus->dirname);
+  if (r < 0 || r >= PATH_MAX)
+    USB_ERROR_STR(-ENAMETOOLONG, "couldn't opendir: %s",
+	strerror(ENAMETOOLONG));
 
   dir = opendir(dirpath);
   if (!dir)
@@ -388,7 +395,7 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
 
   while ((entry = readdir(dir)) != NULL) {
     unsigned char device_desc[DEVICE_DESC_LENGTH];
-    char filename[PATH_MAX + 1];
+    char filename[PATH_MAX];
     struct usb_device *dev;
     struct usb_connectinfo connectinfo;
     int i, fd, ret;
@@ -408,7 +415,11 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
     strncpy(dev->filename, entry->d_name, sizeof(dev->filename) - 1);
     dev->filename[sizeof(dev->filename) - 1] = 0;
 
-    snprintf(filename, sizeof(filename) - 1, "%s/%s", dirpath, entry->d_name);
+    r = snprintf(filename, sizeof(filename) - 1, "%s/%s", dirpath, entry->d_name);
+    if (r < 0 || r >= PATH_MAX)
+      USB_ERROR_STR(-ENAMETOOLONG, "couldn't open: %s",
+          strerror(ENAMETOOLONG));
+
     fd = open(filename, O_RDWR);
     if (fd < 0) {
       fd = open(filename, O_RDONLY);

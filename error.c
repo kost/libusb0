@@ -12,7 +12,7 @@
 #include "usb.h"
 #include "error.h"
 
-char usb_error_str[1024] = "";
+char usb_error_str[8192] = "";
 int usb_error_errno = 0;
 usb_error_type_t usb_error_type = USB_ERROR_TYPE_NONE;
 

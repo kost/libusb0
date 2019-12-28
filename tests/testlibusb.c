@@ -62,7 +62,7 @@ void print_configuration(struct usb_config_descriptor *config)
 int print_device(struct usb_device *dev, int level)
 {
   usb_dev_handle *udev;
-  char description[256];
+  char description[259];
   char string[256];
   int ret, i;
 
