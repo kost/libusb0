@@ -5,6 +5,8 @@
 #include <string>
 #include <list>
 
+#include <sys/types.h>
+
 #include <usb.h>
 
 /*
