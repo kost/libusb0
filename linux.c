@@ -355,6 +355,7 @@ int usb_os_find_busses(struct usb_bus **busses)
 
     strncpy(bus->dirname, entry->d_name, sizeof(bus->dirname) - 1);
     bus->dirname[sizeof(bus->dirname) - 1] = 0;
+    bus->location = atoi(bus->dirname);
 
     LIST_ADD(fbus, bus);
 
