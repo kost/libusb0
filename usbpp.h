@@ -54,7 +54,7 @@ namespace USB {
 		 * \returns the number of bytes sent, or a negative value on
 		 * failure
 		 */
-		int bulkWrite(QByteArray message, int timeout = 100);
+		int bulkWrite(unsigned char* message, int timeout = 100);
 		
 		/**
 		 * \brief Bulk read
