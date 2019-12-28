@@ -871,7 +871,7 @@ static int usb_bulk_transfer (usb_dev_handle *dev, int ep, char *bytes, int size
   return rw_arg.io_size;
 }
 
-int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size, int timeout)
+int usb_bulk_write(usb_dev_handle *dev, int ep, const char *bytes, int size, int timeout)
 {
   int result;
   rw_async_to_func_t to_func = NULL;
@@ -886,7 +886,7 @@ int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size, int timeo
   to_func = (*(device->interface))->WritePipeAsyncTO;
 #endif
 
-  if ((result = usb_bulk_transfer (dev, ep, bytes, size, timeout,
+  if ((result = usb_bulk_transfer (dev, ep, (char *) bytes, size, timeout,
 				   (*(device->interface))->WritePipeAsync, to_func)) < 0)
     USB_ERROR_STR (result, "usb_bulk_write: An error occured during write (see messages above)");
   
@@ -918,7 +918,7 @@ int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size, int timeou
 }
 
 /* interrupt endpoints seem to be treated just like any other endpoint under OSX/Darwin */
-int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+int usb_interrupt_write(usb_dev_handle *dev, int ep, const char *bytes, int size,
 	int timeout)
 {
   return usb_bulk_write (dev, ep, bytes, size, timeout);

@@ -277,11 +277,11 @@ restart:
   return bytesdone;
 }
 
-int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+int usb_bulk_write(usb_dev_handle *dev, int ep, const char *bytes, int size,
 	int timeout)
 {
   /* Ensure the endpoint address is correct */
-  return usb_urb_transfer(dev, ep, USB_URB_TYPE_BULK, bytes, size,
+  return usb_urb_transfer(dev, ep, USB_URB_TYPE_BULK, (char *)bytes, size,
 		timeout);
 }
 
@@ -299,11 +299,11 @@ int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size,
  * 2.5 HCDs yet) don't handle multi-packet Interrupt transfers. So we need
  * to lookup the endpoint packet size and packetize appropriately here.
  */
-int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+int usb_interrupt_write(usb_dev_handle *dev, int ep, const char *bytes, int size,
 	int timeout)
 {
   /* Ensure the endpoint address is correct */
-  return usb_urb_transfer(dev, ep, USB_URB_TYPE_INTERRUPT, bytes, size,
+  return usb_urb_transfer(dev, ep, USB_URB_TYPE_INTERRUPT, (char *)bytes, size,
 		timeout);
 }
 

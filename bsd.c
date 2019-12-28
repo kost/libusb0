@@ -279,7 +279,7 @@ static int ensure_ep_open(usb_dev_handle *dev, int ep, int mode)
   return info->ep_fd[ep];
 }
 
-int usb_bulk_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+int usb_bulk_write(usb_dev_handle *dev, int ep, const char *bytes, int size,
                    int timeout)
 {
   int fd, ret;
@@ -358,7 +358,7 @@ int usb_bulk_read(usb_dev_handle *dev, int ep, char *bytes, int size,
   return ret;
 }
 
-int usb_interrupt_write(usb_dev_handle *dev, int ep, char *bytes, int size,
+int usb_interrupt_write(usb_dev_handle *dev, int ep, const char *bytes, int size,
                         int timeout)
 {
   int fd, ret, sent = 0;
